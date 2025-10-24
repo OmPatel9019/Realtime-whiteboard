@@ -25,7 +25,7 @@ const convex =  new ConvexReactClient(convexUrl);
 // Exports a provider that wires Convex to the existing Clerk auth provider.
 // Important: do NOT add a second `ClerkProvider` here — `app/layout.tsx` already
 // provides Clerk for the whole app. This component expects to be rendered
-// inside that `ClerkProvider` so `useAuth` works correctly.
+// use of 'auth' from '@clerk/nextjs' for authentication.
 export const ConvexClientProvider = ({ children,
 }: ConvexClientProviderProps) => {
     return (
