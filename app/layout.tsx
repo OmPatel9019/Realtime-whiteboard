@@ -20,13 +20,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={`${inter.className} min-h-screen`}>
           <ConvexClientProvider>
-            <SignedOut>
-              <SignIn routing="hash" />
-            </SignedOut>
-            <div className="flex flex-col items-center justify-center">
-              <SignedIn >{children}</SignedIn>
+            <div className="min-h-screen flex flex-col">
+              {children}
             </div>
           </ConvexClientProvider>
         </body>

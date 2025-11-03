@@ -1,13 +1,9 @@
-
-import { Header } from "@/components/header";
-
-export default function Home() {
+export default function page() {
   return (
     <div className="h-full flex flex-col">
-      <Header />
+      
       <div className="flex-1 p-6">
         <h2 className="text-2xl font-semibold mb-4">Welcome to Realtime Whiteboard</h2>
-        <p className="text-gray-600">Start collaborating in real-time!</p>
       </div>
     </div>
   );
