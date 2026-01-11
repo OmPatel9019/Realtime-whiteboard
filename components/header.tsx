@@ -4,11 +4,11 @@ import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 export function Header() {
   return (
-    <div className="p-4 flex items-center justify-between border-b">
-      <div className="flex items-center">
+    <div className="p-4 flex items-center justify-between">
+      {/* <div className="flex items-center">
         <h1 className="text-2xl font-bold">Realtime Whiteboard</h1>
-      </div>
-      <div className="flex items-center gap-4">
+      </div> */}
+      {/* <div className="flex items-center gap-4">
         <SignedIn>
           <UserButton afterSignOutUrl="/" />
         </SignedIn>
@@ -19,7 +19,7 @@ export function Header() {
             </button>
           </SignInButton>
         </SignedOut>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -3,10 +3,10 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ConvexClientProvider } from "@/provider/convex-client-provider";
 import "./globals.css";
 
-export const metadata: Metadata = {
-    title: "Realtime Whiteboard",
-    description: "A realtime whiteboard application",
-};
+// export const metadata: Metadata = {
+//     title: "Realtime Whiteboard",
+//     description: "A realtime whiteboard application",
+// };
 
 export default function RootLayout({
     children,
