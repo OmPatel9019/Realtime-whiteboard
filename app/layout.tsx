@@ -4,7 +4,8 @@ import { ConvexClientProvider } from "@/provider/convex-client-provider";
 import "./globals.css";
 
 // export const metadata: Metadata = {
-//     title: "Realtime Whiteboard",
+//     title: "
+//    e Whiteboard",
 //     description: "A realtime whiteboard application",
 // };
 
