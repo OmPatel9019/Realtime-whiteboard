@@ -16,7 +16,17 @@ export const Navbar = () => {
                     />
                 </div>
             </div>
-            {user ? <UserButton /> : <SignInButton />}
+            {user ? (
+                <UserButton
+                    appearance={{
+                        elements: {
+                            userButtonAvatarBox: "!h-12 !w-12"
+                        }
+                    }}
+                />
+            ) : (
+                <SignInButton />
+            )}
         </div>
     );
 };
