@@ -20,7 +20,7 @@ export const Navbar = () => {
                 <UserButton
                     appearance={{
                         elements: {
-                            userButtonAvatarBox: "!h-12 !w-12"
+                            userButtonAvatarBox: "!h-10 !w-10"
                         }
                     }}
                 />
