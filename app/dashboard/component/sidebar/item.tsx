@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 
 import { cn } from "@/lib/utils";
+
 
 interface ItemProps {
     id: string;
@@ -25,16 +25,20 @@ export const Item = ({ id, name, imageUrl }: ItemProps) => {
 
     return (
         <div className="aspect-square relative">
-            <Image
-                fill
-                alt={name}
-                src={imageUrl}
-                onClick={onClick}
-                className={cn(
-                    "rounded-md cursor-pointer opacity-75 hover:opacity-100 transition",
-                    isActive && "opacity-100"
-                )}
-            />
+                <div
+                    onClick={onClick}
+                    className={cn(
+                        "rounded-md cursor-pointer opacity-75 hover:opacity-100 transition",
+                        "bg-white/25 h-full w-full flex items-center justify-center",
+                        isActive && "opacity-100"
+                    )}
+                >
+                    {/* Instead of using the image URL, I used the organization's name directly. */}
+                    <span className="text-white font-bold">
+                        {name.charAt(0).toUpperCase()}
+                    </span>
+                </div>
+          
         </div>
     );
 };
