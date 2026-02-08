@@ -25,17 +25,16 @@ export const Item = ({ id, name, imageUrl }: ItemProps) => {
 
     return (
         <div className="aspect-square relative">
-            <div
+            <Image
+                fill
+                alt={name}
+                src={imageUrl}
                 onClick={onClick}
                 className={cn(
                     "rounded-md cursor-pointer opacity-75 hover:opacity-100 transition",
                     isActive && "opacity-100"
                 )}
-            >
-                <span className="text-sm font-semibold truncate px-1 text-black bg-white rounded-sm w-full h-full flex items-center justify-center">
-                    {name}
-                </span>
-            </div>
+            />
         </div>
     );
 };
