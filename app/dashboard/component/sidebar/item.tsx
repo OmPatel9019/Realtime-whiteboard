@@ -3,7 +3,7 @@
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 
 import { cn } from "@/lib/utils";
-
+import { Hint } from "@/components/hint";
 
 interface ItemProps {
     id: string;
@@ -34,9 +34,14 @@ export const Item = ({ id, name, imageUrl }: ItemProps) => {
                     )}
                 >
                     {/* Instead of using the image URL, I used the organization's name directly. */}
+                    <Hint label={name}
+                    side="right"
+                    align="start"
+                    sideOffset={18}>
                     <span className="text-white font-bold">
                         {name.charAt(0).toUpperCase()}
                     </span>
+                    </Hint>
                 </div>
           
         </div>
