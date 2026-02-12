@@ -2,6 +2,7 @@
 
 import { UserButton, useUser, SignInButton } from "@clerk/nextjs";
 import { Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const Navbar = () => {
     const { user } = useUser();
@@ -25,7 +26,11 @@ export const Navbar = () => {
                     }}
                 />
             ) : (
-                <SignInButton />
+                <SignInButton>
+                    <Button size="sm" variant="secondary">
+                        Login
+                    </Button>
+                </SignInButton>
             )}
         </div>
     );
