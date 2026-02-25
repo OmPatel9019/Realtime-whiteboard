@@ -33,7 +33,7 @@ export const NewButton = () => {
                 <div className="relative">
                     {/* Below tag enables create organizatoin form */}
                     <CreateOrganization />
-                    <DialogClose className="absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-0">
+                    <DialogClose className="absolute left-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-0">
                         <X className="h-5 w-5 text-muted-foreground" />
                         <span className="sr-only">Close</span>
                     </DialogClose>
