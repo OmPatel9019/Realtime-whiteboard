@@ -9,13 +9,13 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     return (
-        <main className="h-min-screen">
+        <main className="flex flex-col h-screen overflow-hidden">
             <Sidebar />
             <div className="pl-[60px] h-full">
                 <div className="flex gap-x-4 h-full">
                     <Orgsidebar />
-                    <div className="h-full flex-1">
-                        <Navbar/>
+                    <div className="flex-1 flex flex-col">
+                        <Navbar />
                         {/* the {children} prop refers to the content of the page.tsx that is being rendered inside that layout. */}
                         {children}
                     </div>

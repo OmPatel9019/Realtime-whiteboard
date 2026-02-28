@@ -20,7 +20,7 @@
         const favorites = searchParams.get("favorites");
 
         return (
-            <div className="hidden lg:flex flex-col h-full w-[204px] space-y-4 pl-[5px] pt-[5px] ">
+            <div className="hidden lg:flex flex-col h-full w-[204px]  mt-3 space-y-4 pl-[5px] pt-[5px] ">
                 <Link href="/">
                     <div className="flex items-center gap-x-4">
                         <Image

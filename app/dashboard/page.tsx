@@ -2,7 +2,7 @@
 import { EmptyOrg } from "./component/Empty-org";
 const DashboardPage = () => {
   return (
-    <div className="h-full flex-1">
+    <div className="flex-1 flex">
       <EmptyOrg />
     </div>
   );
