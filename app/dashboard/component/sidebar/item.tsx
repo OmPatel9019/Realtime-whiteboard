@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
-
 import { cn } from "@/lib/utils";
 import { Hint } from "@/components/hint";
 
@@ -19,31 +19,29 @@ export const Item = ({ id, name, imageUrl }: ItemProps) => {
 
     const onClick = () => {
         if (!setActive) return;
-
         setActive({ organization: id });
     };
 
     return (
         <div className="aspect-square relative">
+            <Hint label={name} side="right" align="start" sideOffset={18}>
                 <div
                     onClick={onClick}
                     className={cn(
-                        "rounded-md cursor-pointer opacity-75 hover:opacity-100 transition",
-                        "bg-white/25 h-full w-full flex items-center justify-center",
-                        isActive && "opacity-100"
+                        "rounded-md cursor-pointer opacity-75 hover:opacity-100 transition overflow-hidden",
+                        "h-full w-full",
+                        isActive && "opacity-100 ring-2 ring-white"
                     )}
                 >
-                    {/* Instead of using the image URL, I used the organization's name directly. */}
-                    <Hint label={name}
-                    side="right"
-                    align="start"
-                    sideOffset={18}>
-                    <span className="text-white font-bold">
-                        {name.charAt(0).toUpperCase()}
-                    </span>
-                    </Hint>
+                    {/* Use Clerk's generated imageUrl — shows the org's first letter avatar */}
+                    <Image
+                        src={imageUrl}
+                        alt={name}
+                        fill
+                        className="object-cover rounded-md"
+                    />
                 </div>
-          
+            </Hint>
         </div>
     );
 };
