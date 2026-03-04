@@ -3,6 +3,7 @@
 import { use } from "react";
 import { useOrganization } from "@clerk/nextjs";
 import { EmptyOrg } from "./component/Empty-org";
+import { BoardList } from "./component/board-list";
 
 interface DashBoardprops {
   searchParams: Promise<{
@@ -17,8 +18,15 @@ const DashboardPage = ({ searchParams }: DashBoardprops) => {
 
   return (
     <div className="flex-1 flex">
-      {JSON.stringify(params)}
-      {!organization ? (<EmptyOrg />) : (<p>Board List!</p>)}
+      {/* params are displayed inside BoardList; no need to stringify here */}
+      {!organization ? (
+        <EmptyOrg />
+      ) : (
+        <BoardList
+          orgId={organization.id}
+          query={params}
+        />
+      )}
     </div>
   );
 };
