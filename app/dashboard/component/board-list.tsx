@@ -1,8 +1,8 @@
 "use client";
 
-import { EmptySearch } from "./Empty-search";
- import { Favorites } from "./empty-favorites"
-import { TeamBoards } from "./team-boards";
+ import { EmptyFavorites } from "./empty-favorites"
+import { EmptySearch } from "./empty-search";
+import { EmptyBoards } from "./team-boards";
 
 interface BoardListProps {
     orgId : string;
@@ -20,19 +20,15 @@ export const BoardList = ({
   const data = [];
   
   if(!data?.length && query.search){
-    return(
-       <EmptySearch/>
-    );
+    return <EmptySearch/>
   };
+
   if(!data?.length && query.favorites ){
-    return(
-      <Favorites/>
-    );
+    return <EmptyFavorites/>
   };
+
   if(!data?.length){
-    return(
-      <TeamBoards/>
-    );
+    return <EmptyBoards/>
   };
 
     return(
