@@ -4,9 +4,13 @@
 import { v } from "convex/values";
 import { mutation } from "./_generated/server";
 
-// Array of images
+// Array of placeholder images for new boards
 const images = [
-    // /palceholders/1.svg
+    "/placeholders/1.svg",
+    "/placeholders/2.svg",
+    "/placeholders/3.svg",
+    "/placeholders/4.svg",
+    "/placeholders/5.svg",
 ]
 
 // Mutation to create a new board.
@@ -26,16 +30,18 @@ export const create = mutation({
         if (!identity) {
             throw new Error("Unauthorized");
         }
-     const randomImages =[Math.floor(Math.random() * images.length)]
+        // Select a random image from the images array for the board thumbnail
+        const randomImages = images[Math.floor(Math.random() * images.length)];
 
-     const board = await ctx.db.insert("boards",{
-        title: args.title,
-        orgId : args.orgId,
-        authorId: identity.subject,
-        authorname : identity.name!,
-        imageUrl: randomImages,
-     })
+        // Insert the new board document into the database
+        const board = await ctx.db.insert("boards", {
+            title: args.title,
+            orgId: args.orgId,
+            authorId: identity.subject,
+            authorName: identity.name!,
+            imageUrl: randomImages,
+        });
 
-     return board;
+        return board;
     }
 });
