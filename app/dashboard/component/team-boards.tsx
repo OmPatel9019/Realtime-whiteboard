@@ -7,12 +7,13 @@ import { api } from "@/convex/_generated/api"
 import { useOrganization } from "@clerk/nextjs"
 
 export const EmptyBoards = () =>{
-    const create = useMutation(api.board.create);
     const { organization } = useOrganization();
+    const mutate = useMutation(api.board.create);
+  
     const onClick = () => {
 
         if(!organization) return;
-        create({
+        mutate({
             orgId: organization.id,
             title: "Untitled"
         })
