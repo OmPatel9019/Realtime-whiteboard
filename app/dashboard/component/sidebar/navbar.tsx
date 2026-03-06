@@ -54,8 +54,8 @@ export const Navbar = () => {
                 />
             ) : (
                 <SignInButton>
-                    <Button size="sm" variant="secondary">
-                        Login
+                    <Button size="sm">
+                        Sign Up
                     </Button>
                 </SignInButton>
             )}

@@ -16,7 +16,7 @@ export const NewButton = () => {
         <Dialog>
             <DialogTrigger asChild>
                 <div className="aspect-square">
-                    {/* created a plus button that allows to create organization */}
+                   
                     <Hint label="Create organization"
                         side="right"
                         align="start"

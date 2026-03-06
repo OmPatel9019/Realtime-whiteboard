@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus, X } from "lucide-react";
-import { OrganizationProfile } from "@clerk/nextjs";
+import { OrganizationProfile, useAuth } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -13,12 +13,18 @@ import {
 } from "@/components/ui/dialog";
 
 export const InviteMember = () => {
+    const { isSignedIn } = useAuth();
+
+    if (!isSignedIn) {
+        return null;
+    }
+
     return (
         <Dialog>
             <DialogTrigger asChild>
                 <Button variant="outline">
                     <Plus className="w-4 h-4 mr-2" />
-                    Invite Memebers
+                    Invite Member
                 </Button>
             </DialogTrigger>
             <DialogContent className="p-0 bg-transparent border-none shadow-none w-fit max-w-none flex items-center justify-center" showCloseButton={false}>
