@@ -1,8 +1,10 @@
 import type { NextConfig } from "next";
-import { hostname } from "os";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  images : {
+  output: "standalone",
+  outputFileTracingRoot: path.join(__dirname),
+  images: {
     remotePatterns: [
       {
         protocol: "https",

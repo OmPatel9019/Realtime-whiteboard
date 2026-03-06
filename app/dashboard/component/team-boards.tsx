@@ -5,29 +5,35 @@ import { Button } from "@/components/ui/button"
 import { useMutation } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import { useOrganization } from "@clerk/nextjs"
+import { toast } from "sonner";
 
-export const EmptyBoards = () =>{
+export const EmptyBoards = () => {
     const { organization } = useOrganization();
     const mutate = useMutation(api.board.create);
-  
-    const onClick = () => {
 
-        if(!organization) return;
+    const onClick = () => {
+        if (!organization) return;
         mutate({
             orgId: organization.id,
             title: "Untitled"
         })
+        .then((id)=>{
+            toast.success("Board created successfully");
+        })
+        .catch(()=>{
+            toast.error("Failed to create board");
+        })
     }
 
-    return(
+    return (
         <div className="h-full w-full flex flex-col justify-center items-center text-center">
-             <Image
+            <Image
                 src="/board.svg"
                 alt="note"
                 width={250}
                 height={250}
                 className="block -mt-6"
-             />
+            />
             <h2 className="text-xl font-semibold">
                 Create your first board!
             </h2>

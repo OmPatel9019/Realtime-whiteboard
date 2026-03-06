@@ -1,6 +1,7 @@
 import { Orgsidebar } from "./component/org-sidebar";
 import { Sidebar } from "./component/sidebar";
 import { Navbar } from "./component/sidebar/navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 // used to type the props of a component that accepts children — meaning any valid React node(s) passed between the component’s opening and closing tags.
 interface DashboardLayoutProps {
@@ -16,6 +17,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     <Orgsidebar />
                     <div className="flex-1 flex flex-col">
                         <Navbar />
+                        <Toaster />
                         {/* the {children} prop refers to the content of the page.tsx that is being rendered inside that layout. */}
                         {children}
                     </div>
