@@ -1,5 +1,5 @@
 import { Orgsidebar } from "./component/org-sidebar";
-import { Sidebar } from "./component/sidebar";
+import { Sidebar } from "./component/sidebar"; 
 import { Navbar } from "./component/sidebar/navbar";
 import { Toaster } from "@/components/ui/sonner";
 

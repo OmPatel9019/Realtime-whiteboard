@@ -6,11 +6,10 @@ import { mutation } from "./_generated/server";
 
 // Array of placeholder images for new boards
 const images = [
-    "/placeholders/1.svg",
-    "/placeholders/2.svg",
-    "/placeholders/3.svg",
-    "/placeholders/4.svg",
-    "/placeholders/5.svg",
+    "/1.svg",
+    "/2.svg",
+    "/3.svg",
+    "/4.svg",
 ]
 
 // Mutation to create a new board.
@@ -22,7 +21,7 @@ export const create = mutation({
         title: v.string(),
     },
     // The handler function that executes the mutation logic.
-    handler: async(ctx, args) => {
+    handler: async (ctx, args) => {
         // Retrieve the user's identity to check if they are authenticated.
         const identity = await ctx.auth.getUserIdentity();
 

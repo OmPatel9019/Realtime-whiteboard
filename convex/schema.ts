@@ -9,9 +9,9 @@ export default defineSchema({
         authorId: v.string(),
         imageUrl: v.string(),
     })
-    .index("byorg", ["orgId"])
-    .searchIndex("search_title",{
-        searchField:"title",
-        filterFields: ["orgId"]
-    })
+        .index("byorg", ["orgId"])
+        .searchIndex("search_title", {
+            searchField: "title",
+            filterFields: ["orgId"]
+        })
 })
