@@ -24,15 +24,15 @@ export const BoardCard = ({
             href={`/board/${id}`}
             className="group aspect-[100/127] flex flex-col rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all"
         >
-            <div className="relative flex-1 bg-amber-50">
+            <div className="relative flex-1 bg-yellow-50 px-2">
                 <img
                     src={imageUrl.replace("/placeholders/", "/")}
                     alt={title}
-                    className="w-full h-full object-fit"
+                    className="px-2 w-full h-full object-fit"
                 />
             </div>
             <div className="bg-white p-2 text-left">
-                <p className="text-[13px] text-muted-foreground truncate">{title}</p>
+                <p className="text-[13px] text-muted-foreground">{title}</p>
             </div>
         </Link>
     );
