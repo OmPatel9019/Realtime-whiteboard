@@ -2,13 +2,13 @@ import { v } from "convex/values"
 import { query } from "./_generated/server"
 
 export const get = query({
-    args:{
+    args: {
         orgId: v.string(),
     },
-    handler: async(ctx,args) =>{
+    handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
 
-        if(!identity){
+        if (!identity) {
             throw new Error("Unauthorized")
         }
 

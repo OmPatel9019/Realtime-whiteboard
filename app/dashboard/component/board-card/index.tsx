@@ -20,15 +20,18 @@ export const BoardCard = ({
     imageUrl,
 }: BoardCardProps) => {
     return (
-        <Link href={`/board/${id}`} className="group aspect-[100/127] border rounded-lg flex flex-col justify-between overflow-hidden">
-            <div className="relative flex-1 bg-[#fffcf5]">
+        <Link
+            href={`/board/${id}`}
+            className="group aspect-[100/127] flex flex-col rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all"
+        >
+            <div className="relative flex-1 bg-amber-50">
                 <img
-                    src={imageUrl}
+                    src={imageUrl.replace("/placeholders/", "/")}
                     alt={title}
-                    className="w-full h-full object-contain p-6"
+                    className="w-full h-full object-fit"
                 />
             </div>
-            <div className="relative bg-white pt-3 pb-4 px-3 shrink-0 text-left">
+            <div className="bg-white p-2 text-left">
                 <p className="text-[13px] text-muted-foreground truncate">{title}</p>
             </div>
         </Link>
