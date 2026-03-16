@@ -1,0 +1,6 @@
+﻿app/dashboard/component/board-card/index.tsx(53,14): error TS2322: Type '{ isFavorite: boolean; title: string; authorLabel: string; createdAt: string; onClick: () => void; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & FooterProps'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & FooterProps'. Did you mean 'onclick'?
+app/dashboard/component/board-card/new-board-button.tsx(5,23): error TS2307: Cannot find module './sooner' or its corresponding type declarations.
+app/dashboard/component/team-boards.tsx(8,23): error TS2307: Cannot find module 'sonner' or its corresponding type declarations.
+components/ui/sonner.tsx(10,26): error TS2307: Cannot find module 'next-themes' or its corresponding type declarations.
+components/ui/sonner.tsx(11,54): error TS2307: Cannot find module 'sonner' or its corresponding type declarations.
