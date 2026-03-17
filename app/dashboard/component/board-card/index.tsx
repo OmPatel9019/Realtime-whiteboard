@@ -5,6 +5,8 @@ import { formatDistanceToNow } from "date-fns"
 import Link from "next/link";
 import { Footer } from "./Footer"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Actions } from "@/components/actions";
+import { MoreHorizontal } from "lucide-react";
 
 interface BoardCardProps {
     id: string;
@@ -36,7 +38,7 @@ export const BoardCard = ({
     })
     return (
         <Link href={`/board/${id}`}>
-        <div className="group aspect-[100/127] flex flex-col rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all">
+        <div className="group aspect-[100/127] flex flex-col rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all hover:bg-black/30">
         
             <div className="relative flex-1 bg-yellow-50 px-2">
                 <img
@@ -44,7 +46,11 @@ export const BoardCard = ({
                     alt={title}
                     className="px-2 w-full h-full object-fit"
                 />
-               
+               <Actions id={id} title={title}>
+                <button className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity px-3 py-2 outline-none">
+                    <MoreHorizontal className="w-4 h-4 text-black opacity-75 group-hover:opacity-100 transition-opacity"/>
+                </button>
+               </Actions>
             </div>
             <Footer 
              isFavorite={isFavorite}
