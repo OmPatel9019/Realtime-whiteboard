@@ -52,6 +52,7 @@ export const create = mutation({
     }
 });
 
+// Create a function to delete the board
 export const remove = mutation({
     args: {id: v.id("boards")},
     handler: async(ctx, args)=>{
@@ -62,4 +63,28 @@ export const remove = mutation({
         }
         await ctx.db.delete(args.id);
     }
+})
+
+ // Create a function to update the board
+export const update = mutation({
+    args: {id: v.id("boards"), title: v.string()},
+    handler: async(ctx, args)=>{
+        const identity = await ctx.auth.getUserIdentity();
+        if(!identity){
+            throw new Error("Unauthorized");
+        }
+
+        const title = args.title.trim();
+
+        if(!title){
+            throw new Error("Title is required!");
+        }
+        if(title.length>60){
+            throw new Error("Title exceeds 60 characters!")
+        };
+        const board = await ctx.db.patch( args.id,{
+            title :args.title,
+         })
+         return board;
+        }
 })
