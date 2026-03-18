@@ -2,7 +2,7 @@
 
 import { DropdownMenuContentProps} from "@radix-ui/react-dropdown-menu"
 import { useApiMutation } from "@/hooks/use-api-mutation";
-import { Link2, Trash2 } from "lucide-react";
+import { Ghost, Link2, Trash2 } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
+import { ConfirmModel } from "./confirm-model";
+import { Button } from "./ui/button";
 
 interface ActionProps{
     children : React.ReactNode;
@@ -58,12 +60,21 @@ export const Actions =({
                 />
                 Copy board link
             </DropdownMenuItem>
-            <DropdownMenuItem className="p-3 cursor-pointer" onClick={onDelete}>
+            <ConfirmModel
+                header="Delete Board?"
+                description="This will delete your board"
+                disabled={pending}
+                onConfirm={onDelete}
+            >
+            <Button 
+            variant="ghost"
+            className="p-3 cursor-pointer text-m justify-start font-normal" >
                 <Trash2
                 className="h-4 w-4 mr-2"
                 />
                 Delete
-            </DropdownMenuItem>
+            </Button>
+            </ConfirmModel>
         </DropdownMenuContent>
        </DropdownMenu>
     )
