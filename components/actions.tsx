@@ -2,7 +2,7 @@
 
 import { DropdownMenuContentProps} from "@radix-ui/react-dropdown-menu"
 import { useApiMutation } from "@/hooks/use-api-mutation";
-import { Ghost, Link2, Trash2 } from "lucide-react";
+import { Ghost, Link2, Trash2, Pencil } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";
 import { ConfirmModel } from "./confirm-model";
 import { Button } from "./ui/button";
+import { useRenameModel } from "@/store/use-rename-model";
 
 interface ActionProps{
     children : React.ReactNode;
@@ -30,7 +31,7 @@ export const Actions =({
     id,
     title
 }: ActionProps) =>{
-
+    const { onOpen } = useRenameModel();
     const { mutate , pending } = useApiMutation(api.board.remove)
     const onCopyLink = () =>{
         navigator.clipboard.writeText(
@@ -59,6 +60,12 @@ export const Actions =({
                 className="h-4 w-4 mr-2"
                 />
                 Copy board link
+            </DropdownMenuItem>
+             <DropdownMenuItem className="p-3 cursor-pointer" onClick={() => onOpen(id, title)}>
+                <Pencil
+                className="h-4 w-4 mr-2"
+                />
+                Rename
             </DropdownMenuItem>
             <ConfirmModel
                 header="Delete Board?"
