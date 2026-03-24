@@ -60,9 +60,25 @@ export const remove = mutation({
         if(!identity){
             throw new Error("Unauthorized");
         }
+
+        const board = await ctx.db.get(args.id);
+        if (!board) {
+            throw new Error("Board not found");
+        }
+
+        const favorites = await ctx.db
+            .query("userFavorites")
+            .withIndex("by_board", (q) => q.eq("boardId", args.id))
+            .collect();
+
+        for (const fav of favorites) {
+            await ctx.db.delete(fav._id);
+        }
+
         await ctx.db.delete(args.id);
     }
 })
+
 
  // Create a function to update the board
 export const update = mutation({
@@ -148,7 +164,7 @@ export const unfavorite = mutation({
             .unique();
 
         if(!existingFavorite){
-            throw new Error("Board already favorited");
+            throw new Error("Board not favorited");
         }
         await ctx.db.delete(existingFavorite._id);
         return board;

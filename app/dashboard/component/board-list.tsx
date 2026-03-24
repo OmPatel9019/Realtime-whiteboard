@@ -23,7 +23,16 @@ export const BoardList = ({
   query,
 }: BoardListProps) => {
 
-  const data = useQuery(api.boards.get, { orgId });
+  const data = useQuery(api.boards.get, { orgId }) as Array<{
+    _id: string;
+    _creationTime: number;
+    title: string;
+    imageUrl: string;
+    authorId: string;
+    authorName: string;
+    orgId: string;
+    isFavorite: boolean;
+  }> | undefined;
 
   if (data === undefined) {
     return <div>
@@ -68,7 +77,7 @@ export const BoardList = ({
             authorName={board.authorName}
             orgId={board.orgId}
             createdAt={board._creationTime}
-            isFavorite={false} />
+            isFavorite={board.isFavorite} />
         ))}
       </div>
     </div>
