@@ -40,10 +40,10 @@ export const BoardCard = ({
     const { userId } = useAuth();
     const authorLabel = userId === authorId ? 'You' : authorName;
     const addLabel = formatDistanceToNow(createdAt, {
-        addSuffix : true,
+        addSuffix: true,
     });
 
-    const handleFavorite =useMutation(api.board.favorite);
+    const handleFavorite = useMutation(api.board.favorite);
 
     const {
         mutate: onFavorite,
@@ -51,54 +51,54 @@ export const BoardCard = ({
     } = useApiMutation(api.board.favorite);
 
     const {
-          mutate: onUnFavorite,
+        mutate: onUnFavorite,
         pending: pendingUnFavorite
     } = useApiMutation(api.board.unfavorite);
-    
-    const toggleFavorite= () =>{
-        if(isFavorite){
-            onUnFavorite({id})
-            .catch(()=> toast.error("Failed to unfavorite"))
-        }else{
-            handleFavorite({id: id as Id<"boards">, orgId})
-             .catch(()=> toast.error("Failed to favorite"))
+
+    const toggleFavorite = () => {
+        if (isFavorite) {
+            onUnFavorite({ id })
+                .catch(() => toast.error("Failed to unfavorite"))
+        } else {
+            handleFavorite({ id: id as Id<"boards">, orgId })
+                .catch(() => toast.error("Failed to favorite"))
         }
     }
 
     return (
         <Link href={`/board/${id}`}>
-        <div className="group aspect-[100/127] flex flex-col rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all hover:bg-black/30">
-        
-            <div className="relative flex-1 bg-yellow-50 px-2">
-                <img
-                    src={imageUrl.replace("/placeholders/", "/")}
-                    alt={title}
-                    className="px-2 w-full h-full object-fit"
+            <div className="group aspect-[100/127] flex flex-col rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all hover:bg-black/30">
+
+                <div className="relative flex-1 bg-yellow-50 px-2">
+                    <img
+                        src={imageUrl.replace("/placeholders/", "/")}
+                        alt={title}
+                        className="px-2 w-full h-full object-fit"
+                    />
+                    <Actions id={id} title={title}>
+                        <button className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity px-3 py-2 outline-none">
+                            <MoreHorizontal className="w-4 h-4 text-black opacity-75 group-hover:opacity-100 transition-opacity" />
+                        </button>
+                    </Actions>
+                </div>
+                <Footer
+                    isFavorite={isFavorite}
+                    title={title}
+                    authorLabel={authorLabel}
+                    createdAtLabel={addLabel}
+                    onClick={toggleFavorite}
+                    disabled={pendingFavorite || pendingUnFavorite}
                 />
-               <Actions id={id} title={title}>
-                <button className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity px-3 py-2 outline-none">
-                    <MoreHorizontal className="w-4 h-4 text-black opacity-75 group-hover:opacity-100 transition-opacity"/>
-                </button>
-               </Actions>
             </div>
-            <Footer 
-             isFavorite={isFavorite}
-             title={title}
-             authorLabel={authorLabel}
-             createdAtLabel={addLabel}
-             onClick={toggleFavorite}
-             disabled={pendingFavorite || pendingUnFavorite}
-            />
-        </div>
         </Link>
     );
 };
 
-BoardCard.Skeleton = function BoardCardSkeleton(){
+BoardCard.Skeleton = function BoardCardSkeleton() {
     return (
-            <div className="aspect-[100/127] rounded-lg overflow-hidden">
-                <Skeleton className="px-2 w-full h-full object-fit" />
-            </div>
-        
+        <div className="aspect-[100/127] rounded-lg overflow-hidden">
+            <Skeleton className="px-2 w-full h-full object-fit" />
+        </div>
+
     );
 }

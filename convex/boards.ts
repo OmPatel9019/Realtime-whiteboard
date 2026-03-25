@@ -5,6 +5,7 @@ import { favorite } from "./board";
 export const get = query({
     args: {
         orgId: v.string(),
+        search: v.optional(v.string())
     },
     handler: async (ctx, args) => {
         const identity = await ctx.auth.getUserIdentity();
@@ -13,30 +14,42 @@ export const get = query({
             throw new Error("Unauthorized")
         }
 
-        const boards = await ctx.db
-            .query("boards")
-            .withIndex("byorg", (q) => q.eq("orgId", args.orgId))
-            .order("desc")
-            .collect()
+        const title = args.search as string;
+        let boards = [];
 
-            const boardswithFavoritesRelation = boards.map((board)=>{
-                return ctx.db
-                    .query("userFavorites")
-                    .withIndex("by_user_board", (q)=> 
+        if (title) {
+            boards = await ctx.db
+                .query("boards")
+                .withSearchIndex("search_title", (q) =>
                     q
-                     .eq("userId", identity.subject)
-                     .eq("boardId", board._id)
+                        .search("title", title)
+                        .eq("orgId", args.orgId)
+                ).collect()
+        } else {
+            boards = await ctx.db
+                .query("boards")
+                .withIndex("byorg", (q) => q.eq("orgId", args.orgId))
+                .order("desc")
+                .collect()
+        };
+        const boardswithFavoritesRelation = boards.map((board) => {
+            return ctx.db
+                .query("userFavorites")
+                .withIndex("by_user_board", (q) =>
+                    q
+                        .eq("userId", identity.subject)
+                        .eq("boardId", board._id)
                 )
                 .unique()
                 .then(
                     (fav) => ({
-                         ...board,
-                        isFavorite: !! fav,
+                        ...board,
+                        isFavorite: !!fav,
                     })
                 )
-            })
+        })
 
-            const boardswithFavoritesBollean = Promise.all(boardswithFavoritesRelation)
-        return  boardswithFavoritesBollean;
+        const boardswithFavoritesBollean = Promise.all(boardswithFavoritesRelation)
+        return boardswithFavoritesBollean;
     }
 });
