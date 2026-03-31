@@ -2,7 +2,7 @@
 // It defines operations like creating a new board, ensuring proper authorization.
 
 import { v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./_generated/server";
 
 // Array of placeholder images for new boards
 const images = [
@@ -168,5 +168,13 @@ export const unfavorite = mutation({
         }
         await ctx.db.delete(existingFavorite._id);
         return board;
-    }
-})
+    },
+});
+
+export const get = query({
+    args: {id: v.id("boards")},
+    handler: async(ctx, args)=>{
+        const board = await ctx.db.get(args.id);
+        return board;
+    },
+});

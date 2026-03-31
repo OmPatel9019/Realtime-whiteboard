@@ -21,7 +21,7 @@ export default clerkMiddleware((auth, req) => {
   if (!isPublic(req)) {
     auth.protect();
   }
-});
+}, { clockSkewInMs: 100000 });
 
 // 4. Use the new, recommended matcher from your example
 export const config = {
