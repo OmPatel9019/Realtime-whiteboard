@@ -75,7 +75,7 @@ export const Actions =({
             >
             <Button 
             variant="ghost"
-            className="p-3 cursor-pointer text-m justify-start font-normal" >
+            className="p-3 w-full cursor-pointer text-m justify-start font-normal" >
                 <Trash2
                 className="h-4 w-4 mr-2"
                 />

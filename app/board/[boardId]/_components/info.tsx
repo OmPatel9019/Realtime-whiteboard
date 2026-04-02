@@ -63,7 +63,7 @@ export const Info = ({ boardId }: InfoProps) => {
             <TabSeparator />
             <Hint label="Edit title" side="bottom" sideOffset={10}>
                 <Button variant="board" className="px-2" onClick={() => onOpen(data._id, data.title)}>
-                    <span className={cn("font-semibold text-xl ml-1 text-black-800", fonts.className)}>
+                    <span className={cn("font-semibold text-xl text-black-800", fonts.className)}>
                         {data.title}
                     </span>
                 </Button>

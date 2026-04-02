@@ -40,3 +40,5 @@ next-env.d.ts
 
 # Convex
 /convex/_generated
+
+.npmrc
