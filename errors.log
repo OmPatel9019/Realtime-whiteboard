@@ -1,5 +1,0 @@
-﻿app/dashboard/component/board-list.tsx(23,35): error TS2339: Property 'get' does not exist on type '{ create: FunctionReference<"mutation", "public", { title: string; orgId: string; }, string & { __tableName: "boards"; }, string | undefined>; }'.
-app/dashboard/component/board-list.tsx(47,20): error TS7006: Parameter 'board' implicitly has an 'any' type.
-app/dashboard/layout.tsx(2,10): error TS2305: Module '"./component/sidebar"' has no exported member 'Sidebar'.
-app/page.tsx(2,10): error TS2305: Module '"./dashboard/component/sidebar"' has no exported member 'Sidebar'.
-convex/boards.ts(17,24): error TS2345: Argument of type '"by_org"' is not assignable to parameter of type '"byorg" | keyof SystemIndexes'.
