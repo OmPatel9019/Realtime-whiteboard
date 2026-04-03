@@ -39,13 +39,16 @@ export const create = mutation({
         const randomImages = images[Math.floor(Math.random() * images.length)];
 
         // Insert the new board document into the database
-        const board = await ctx.db.insert("boards", {
+        const boardData: any = {
             title: args.title,
             orgId: args.orgId,
             authorId: identity.subject,
-            authorName: identity.name!,
             imageUrl: randomImages,
-        });
+        };
+        if (identity.name) {
+            boardData.authorName = identity.name;
+        }
+        const board = await ctx.db.insert("boards", boardData);
 
         return board;
     }
