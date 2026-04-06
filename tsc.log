@@ -1,0 +1,8 @@
+app/board/[boardId]/_components/canvas.tsx(75,33): error TS2345: Argument of type 'LiveObject<{ type: LayerType.Note | LayerType.Text | LayerType.Ellipse | LayerType.Rectangle; x: number; y: number; width: number; height: number; fill: Color; }>' is not assignable to parameter of type 'LiveObject<Layer>'.
+  The types returned by 'toObject()' are incompatible between these types.
+    Type '{ type: LayerType.Note | LayerType.Text | LayerType.Ellipse | LayerType.Rectangle; x: number; y: number; width: number; height: number; fill: Color; }' is not assignable to type 'Layer'.
+      Type '{ type: LayerType.Note | LayerType.Text | LayerType.Ellipse | LayerType.Rectangle; x: number; y: number; width: number; height: number; fill: Color; }' is not assignable to type 'RectangleLayer | TextLayer | NoteLayer | EllipseLayer'.
+        Type '{ type: LayerType.Note | LayerType.Text | LayerType.Ellipse | LayerType.Rectangle; x: number; y: number; width: number; height: number; fill: Color; }' is not assignable to type 'EllipseLayer'.
+          Types of property 'type' are incompatible.
+            Type 'LayerType.Note | LayerType.Text | LayerType.Ellipse | LayerType.Rectangle' is not assignable to type 'LayerType.Ellipse'.
+              Type 'LayerType.Note' is not assignable to type 'LayerType.Ellipse'.
