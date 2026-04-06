@@ -143,3 +143,4 @@ export enum CanvasMode {
     SelectionNet,
     Inserting
 }
+
