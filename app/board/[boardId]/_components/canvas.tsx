@@ -30,6 +30,7 @@ import { nanoid } from "nanoid";
 import { connectionIdToColor, pointerEventToCanvasPoint } from "@/lib/utils";
 import { LiveObject } from "@liveblocks/client";
 import { Layerpreview } from "./layer-preview";
+import { SelectionBox } from "./selection-box";
 
 
 const MAX_LAYERS = 100;
@@ -190,6 +191,9 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                             selectionColor={layerIdToColorSelection[layerId]}
                         />
                     ))}
+                    <SelectionBox
+                        onResizeLayerPointerDown={()=>{}}
+                    />
                     <CursorPresence />
                 </g>
             </svg>

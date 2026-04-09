@@ -1,0 +1,61 @@
+"use client"
+
+import { memo } from "react";
+import { XYWH, Side, LayerType } from "@/types/canvas";
+import { useSelf, useStorage } from "@liveblocks/react";
+import { useSelectionBounds } from "@/hooks/use-selection-bounds";
+
+interface SelectionBoxProps {
+    onResizeLayerPointerDown: (corner: Side, InitialBounds: XYWH) => void;
+}
+
+const HANDLE_WIDTH = 8;
+
+export const SelectionBox = memo(({onResizeLayerPointerDown}: SelectionBoxProps) => {
+    const solelayerIds = useSelf((me)=>
+        me.presence.selection.length === 1 ? me.presence.selection[0] : null
+    );
+
+    const isShowingHandles = useStorage((root)=> solelayerIds && root.layers.get(solelayerIds)?.type !== LayerType.Path);
+       
+
+    const bounds = useSelectionBounds();
+    if(!bounds){
+        return null;
+    }
+
+    return (
+      <>
+        <rect
+            className="fill-transparent stroke-blue-500 stroke-1 pointer-events-none"
+            style={{
+                transform: `translate(${bounds.x}px, ${bounds.y}px)`,
+            }}
+            x={0}
+            y={0}
+            width={bounds.width}
+            height={bounds.height}
+        />
+        {isShowingHandles && (
+            <>
+            <rect
+                className="fill-white stroke-blue-500 stroke-1"
+                x={0}
+                y={0}
+                style={{
+                    cursor: "nesw-resize",
+                    width: `${HANDLE_WIDTH}px`,
+                    height: `${HANDLE_WIDTH}px`,
+                    transform: `translate(${bounds.x - HANDLE_WIDTH / 2 + bounds.width}px, ${bounds.y - HANDLE_WIDTH / 2}px)`
+                }}
+                onPointerDown={(e)=> {
+                    e.stopPropagation();
+                }}
+            />
+            </>
+        )}
+      </>
+    )
+})
+
+SelectionBox.displayName = "SelectionBox";
