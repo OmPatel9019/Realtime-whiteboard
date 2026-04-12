@@ -2,7 +2,7 @@
 
 import { memo } from "react";
 import { XYWH, Side, LayerType } from "@/types/canvas";
-import { useSelf, useStorage } from "@liveblocks/react";
+import { useSelf, useStorage } from "@liveblocks/react/suspense";
 import { useSelectionBounds } from "@/hooks/use-selection-bounds";
 
 interface SelectionBoxProps {
@@ -38,20 +38,126 @@ export const SelectionBox = memo(({onResizeLayerPointerDown}: SelectionBoxProps)
         />
         {isShowingHandles && (
             <>
-            <rect
-                className="fill-white stroke-blue-500 stroke-1"
-                x={0}
-                y={0}
-                style={{
-                    cursor: "nesw-resize",
-                    width: `${HANDLE_WIDTH}px`,
-                    height: `${HANDLE_WIDTH}px`,
-                    transform: `translate(${bounds.x - HANDLE_WIDTH / 2 + bounds.width}px, ${bounds.y - HANDLE_WIDTH / 2}px)`
-                }}
-                onPointerDown={(e)=> {
-                    e.stopPropagation();
-                }}
-            />
+              <rect
+                  className="fill-white stroke-blue-500 stroke-1"
+                  x={0}
+                  y={0}
+                  style={{
+                      cursor: "nwse-resize",
+                      width: `${HANDLE_WIDTH}px`,
+                      height: `${HANDLE_WIDTH}px`,
+                      transform: `translate(${bounds.x - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH / 2}px)`
+                  }}
+                  onPointerDown={(e)=> {
+                      e.stopPropagation();
+                      onResizeLayerPointerDown(Side.Top | Side.Left, bounds);
+                  }}
+              />
+              <rect
+                  className="fill-white stroke-blue-500 stroke-1"
+                  x={0}
+                  y={0}
+                  style={{
+                      cursor: "ns-resize",
+                      width: `${HANDLE_WIDTH}px`,
+                      height: `${HANDLE_WIDTH}px`,
+                      transform: `translate(${bounds.x + bounds.width / 2 - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH / 2}px)`
+                  }}
+                  onPointerDown={(e)=> {
+                      e.stopPropagation();
+                      onResizeLayerPointerDown(Side.Top, bounds);
+                  }}
+              />
+              <rect
+                  className="fill-white stroke-blue-500 stroke-1"
+                  x={0}
+                  y={0}
+                  style={{
+                      cursor: "nesw-resize",
+                      width: `${HANDLE_WIDTH}px`,
+                      height: `${HANDLE_WIDTH}px`,
+                      transform: `translate(${bounds.x - HANDLE_WIDTH / 2 + bounds.width}px, ${bounds.y - HANDLE_WIDTH / 2}px)`
+                  }}
+                  onPointerDown={(e)=> {
+                      e.stopPropagation();
+                      onResizeLayerPointerDown(Side.Top | Side.Right, bounds);
+                  }}
+              />
+              <rect
+                  className="fill-white stroke-blue-500 stroke-1"
+                  x={0}
+                  y={0}
+                  style={{
+                      cursor: "ew-resize",
+                      width: `${HANDLE_WIDTH}px`,
+                      height: `${HANDLE_WIDTH}px`,
+                      transform: `translate(${bounds.x - HANDLE_WIDTH / 2 + bounds.width}px, ${bounds.y + bounds.height / 2 - HANDLE_WIDTH / 2}px)`
+                  }}
+                  onPointerDown={(e)=> {
+                      e.stopPropagation();
+                      onResizeLayerPointerDown(Side.Right, bounds);
+                  }}
+              />
+              <rect
+                  className="fill-white stroke-blue-500 stroke-1"
+                  x={0}
+                  y={0}
+                  style={{
+                      cursor: "nwse-resize",
+                      width: `${HANDLE_WIDTH}px`,
+                      height: `${HANDLE_WIDTH}px`,
+                      transform: `translate(${bounds.x - HANDLE_WIDTH / 2 + bounds.width}px, ${bounds.y - HANDLE_WIDTH / 2 + bounds.height}px)`
+                  }}
+                  onPointerDown={(e)=> {
+                      e.stopPropagation();
+                      onResizeLayerPointerDown(Side.Bottom | Side.Right, bounds);
+                  }}
+              />
+              <rect
+                  className="fill-white stroke-blue-500 stroke-1"
+                  x={0}
+                  y={0}
+                  style={{
+                      cursor: "ns-resize",
+                      width: `${HANDLE_WIDTH}px`,
+                      height: `${HANDLE_WIDTH}px`,
+                      transform: `translate(${bounds.x + bounds.width / 2 - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH / 2 + bounds.height}px)`
+                  }}
+                  onPointerDown={(e)=> {
+                      e.stopPropagation();
+                      onResizeLayerPointerDown(Side.Bottom, bounds);
+                  }}
+              />
+              <rect
+                  className="fill-white stroke-blue-500 stroke-1"
+                  x={0}
+                  y={0}
+                  style={{
+                      cursor: "nesw-resize",
+                      width: `${HANDLE_WIDTH}px`,
+                      height: `${HANDLE_WIDTH}px`,
+                      transform: `translate(${bounds.x - HANDLE_WIDTH / 2}px, ${bounds.y - HANDLE_WIDTH / 2 + bounds.height}px)`
+                  }}
+                  onPointerDown={(e)=> {
+                      e.stopPropagation();
+                      onResizeLayerPointerDown(Side.Bottom | Side.Left, bounds);
+                  }}
+              />
+              <rect
+                  className="fill-white stroke-blue-500 stroke-1"
+                  x={0}
+                  y={0}
+                  style={{
+                      cursor: "ew-resize",
+                      width: `${HANDLE_WIDTH}px`,
+                      height: `${HANDLE_WIDTH}px`,
+                      transform: `translate(${bounds.x - HANDLE_WIDTH / 2}px, ${bounds.y + bounds.height / 2 - HANDLE_WIDTH / 2}px)`
+                  }}
+                  onPointerDown={(e)=> {
+                      e.stopPropagation();
+                      onResizeLayerPointerDown(Side.Left, bounds);
+                  }}
+              />
             </>
         )}
       </>

@@ -15,7 +15,7 @@ export const Participants = () => {
         <div className="absolute top-2 right-2 bg-white rounded-md p-3 h-12 flex items-center shadow-md">
             <div className="flex gap-x-2">
                 {users.map(({ connectionId, info }) => (
-                    <UserAvatar  borderColor={connectionIdToColor(connectionId)}
+                    <UserAvatar borderColor={connectionIdToColor(connectionId)}
                         key={connectionId}
                         src={info?.image}
                         name={info?.name}
@@ -31,9 +31,9 @@ export const Participants = () => {
                     />
                 )}
 
-                {hasMoreUsers &&(
+                {hasMoreUsers && (
                     <UserAvatar
-                        name={ `${users.length - MAX_SHOWN_USERS} more`}
+                        name={`${users.length - MAX_SHOWN_USERS} more`}
                         fallback={` +${users.length - MAX_SHOWN_USERS}`}
                     />
                 )}

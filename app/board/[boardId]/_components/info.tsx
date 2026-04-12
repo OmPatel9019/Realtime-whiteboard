@@ -18,7 +18,7 @@ import { Actions } from "@/components/actions";
 import { MoreHorizontal } from "lucide-react";
 
 interface InfoProps {
-    boardId: String;
+    boardId: string;
 }
 
 const fonts = Poppins({

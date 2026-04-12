@@ -11,12 +11,12 @@ interface LayerPreviewProps {
     selectionColor?: string;
 }
 
-export const Layerpreview = memo(({id, onLayerPointerDown, selectionColor}: LayerPreviewProps) => {
+export const Layerpreview = memo(({ id, onLayerPointerDown, selectionColor }: LayerPreviewProps) => {
     const layer = useStorage((root) => root.layers.get(id));
     if (!layer) {
         return null;
     }
-       switch (layer.type) {
+    switch (layer.type) {
         case LayerType.Rectangle:
             return (
                 <Rectangle
@@ -28,9 +28,9 @@ export const Layerpreview = memo(({id, onLayerPointerDown, selectionColor}: Laye
             );
 
         default:
-           console.warn("Unknown layer type");
-           return null;
-       }
+            console.warn("Unknown layer type");
+            return null;
+    }
 });
 
 Layerpreview.displayName = "LayerPreview";

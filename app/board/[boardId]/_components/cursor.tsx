@@ -15,13 +15,13 @@ export const Cursor = memo(({ connectionId }: CursorProps) => {
   const cursor = useOther(connectionId, (user) => user.presence.cursor) || null;
 
   const name = info?.name || "Teammate";
-  
+
   if (!cursor) {
     return null;
   }
 
   const { x, y } = cursor;
-  
+
 
   return (
     <foreignObject
