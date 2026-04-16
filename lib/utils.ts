@@ -55,6 +55,22 @@ export function resizeBounds(bounds: XYWH, corner: Side, point: Point): XYWH {
   return result;
 };
 
+/**
+ * Converts a list of [x, y, pressure?] points into a smooth SVG path string.
+ */
+export function getSvgPathFromPoints(points: number[][]): string {
+  if (points.length < 2) return "";
+  let d = `M ${points[0][0]} ${points[0][1]}`;
+  for (let i = 1; i < points.length - 1; i++) {
+    const midX = (points[i][0] + points[i + 1][0]) / 2;
+    const midY = (points[i][1] + points[i + 1][1]) / 2;
+    d += ` Q ${points[i][0]} ${points[i][1]} ${midX} ${midY}`;
+  }
+  const last = points[points.length - 1];
+  d += ` L ${last[0]} ${last[1]}`;
+  return d;
+}
+
 export function findInterSectingLayers(
   layerIds: string[],
   layers: ReadonlyMap<string, Layer>,
@@ -86,4 +102,9 @@ export function findInterSectingLayers(
     }
   }
   return ids;
+}
+
+export const getContrastingTextColor = (fill: Color) => {
+  const luminance = (0.299 * fill.r + 0.587 * fill.g + 0.114 * fill.b) / 255;
+  return luminance > 0.5 ? "#000000ff" : "#000000ff";
 }

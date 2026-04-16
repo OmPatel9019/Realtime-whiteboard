@@ -37,6 +37,7 @@ import { SelectionBox } from "./selection-box";
 import { SelectionTools } from "./selection-tools";
 
 
+
 const MAX_LAYERS = 100;
 
 interface CanvasProps {
@@ -55,6 +56,8 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         g: 0,
         b: 0
     });
+    // Live pencil points while drawing (not yet committed to storage)
+    const [pencilDraft, setPencilDraft] = useState<number[][] | null>(null);
 
     const history = useHistory();
     const canUndo = useCanUndo();
@@ -75,9 +78,12 @@ export const Canvas = ({ boardId }: CanvasProps) => {
             type: layerType,
             x: position.x,
             y: position.y,
-            width: 100,
-            height: 100,
-            fill: lastUsedColor,
+            width: layerType === LayerType.Note ? 150 : 100,
+            height: layerType === LayerType.Note ? 150 : 100,
+            fill: layerType === LayerType.Note 
+                ? { r: 255, g: 204, b: 153 } 
+                : (layerType === LayerType.Text ? { r: 0, g: 0, b: 0 } : lastUsedColor),
+            value: "",
         } as Layer);
 
         liveLayerIds.push(layerId);
@@ -187,6 +193,58 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         }
     }, [canvasState]);
 
+    const continueDrawing = useCallback((
+        point: Point,
+        e: React.PointerEvent,
+    ) => {
+        if (canvasState.mode !== CanvasMode.Pencil) return;
+        setPencilDraft((prev) => {
+            if (!prev) return [[point.x, point.y, e.pressure]];
+            return [...prev, [point.x, point.y, e.pressure]];
+        });
+    }, [canvasState.mode]);
+
+    const insertPath = useMutation(({ storage, self, setMyPresence }) => {
+        const liveLayers = storage.get("layers");
+        if (
+            pencilDraft == null ||
+            pencilDraft.length < 2 ||
+            liveLayers.size >= MAX_LAYERS
+        ) {
+            setPencilDraft(null);
+            return;
+        }
+        const liveLayerIds = storage.get("layerIds");
+        const id = nanoid();
+
+        // bounding box of the path
+        const xs = pencilDraft.map((p) => p[0]);
+        const ys = pencilDraft.map((p) => p[1]);
+        const x = Math.min(...xs);
+        const y = Math.min(...ys);
+        const width = Math.max(...xs) - x || 1;
+        const height = Math.max(...ys) - y || 1;
+
+        // Normalize points relative to bounding box origin
+        const normalizedPoints = pencilDraft.map((p) => [p[0] - x, p[1] - y, p[2]]);
+
+        const layer = new LiveObject({
+            type: LayerType.Path,
+            x,
+            y,
+            width,
+            height,
+            fill: lastUsedColor,
+            points: normalizedPoints,
+        } as Layer);
+
+        liveLayerIds.push(id);
+        liveLayers.set(id, layer);
+        setMyPresence({ selection: [id] }, { addToHistory: true });
+        setPencilDraft(null);
+        setCanvasState({ mode: CanvasMode.Pencil });
+    }, [pencilDraft, lastUsedColor]);
+
     const onPointerMove = useMutation(({ setMyPresence }, e: React.PointerEvent) => {
         e.preventDefault();
 
@@ -194,21 +252,24 @@ export const Canvas = ({ boardId }: CanvasProps) => {
 
         if (canvasState.mode === CanvasMode.Pressing) {
             startMultiSelection(current, canvasState.origin);
-        }else if (canvasState.mode === CanvasMode.Translating) {
+        } else if (canvasState.mode === CanvasMode.Translating) {
             translateSelectedLayer(current);
-        }else if (canvasState.mode === CanvasMode.Resizing) {
+        } else if (canvasState.mode === CanvasMode.Resizing) {
             resizeSelectedLayer(current);
-        }else if (canvasState.mode === CanvasMode.SelectionNet) {
-           updateSelectionNet(current, canvasState.origin); 
+        } else if (canvasState.mode === CanvasMode.SelectionNet) {
+            updateSelectionNet(current, canvasState.origin);
+        } else if (canvasState.mode === CanvasMode.Pencil) {
+            continueDrawing(current, e);
         }
 
         setMyPresence({ cursor: current });
-    }, 
+    },
     [
-     camera, 
-     canvasState, 
-     resizeSelectedLayer,
-     translateSelectedLayer
+        camera,
+        canvasState,
+        resizeSelectedLayer,
+        translateSelectedLayer,
+        continueDrawing,
     ]);
 
     const onPointerLeave = useMutation(({ setMyPresence }) => {
@@ -218,31 +279,35 @@ export const Canvas = ({ boardId }: CanvasProps) => {
     const onPointerUp = useMutation(({ }, e) => {
         const point = pointerEventToCanvasPoint(e, camera);
 
-        if(
+        if (
             canvasState.mode === CanvasMode.None || canvasState.mode === CanvasMode.Pressing
-        ){
+        ) {
             unselectLayers();
             setCanvasState({ mode: CanvasMode.None });
-        } else if (
-            canvasState.mode === CanvasMode.Inserting
-        ) {
+        } else if (canvasState.mode === CanvasMode.Inserting) {
             insertLayer(canvasState.layerType, point);
+        } else if (canvasState.mode === CanvasMode.Pencil) {
+            insertPath();
         } else {
             setCanvasState({ mode: CanvasMode.None });
         }
         history.resume();
-    }, [canvasState, camera, history, insertLayer, unselectLayers]);
+    }, [canvasState, camera, history, insertLayer, unselectLayers, insertPath]);
 
     const onPointerDown = useCallback((e: React.PointerEvent) => {
         const point = pointerEventToCanvasPoint(e, camera);
 
-        if (
-            canvasState.mode === CanvasMode.Inserting
-        ) {
-            insertLayer(canvasState.layerType, point);
+        if (canvasState.mode === CanvasMode.Inserting) {
+            return; // handled on pointer-up
         }
-        setCanvasState({ origin: point, mode: CanvasMode.Pressing})
-    }, [canvasState.mode, camera, setCanvasState, insertLayer]);
+
+        if (canvasState.mode === CanvasMode.Pencil) {
+            setPencilDraft([[point.x, point.y, e.pressure]]);
+            return;
+        }
+
+        setCanvasState({ origin: point, mode: CanvasMode.Pressing });
+    }, [canvasState.mode, camera, setCanvasState]);
 
     const selections = useOthersMapped((other) => other.presence.selection);
 
@@ -343,6 +408,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                             height={Math.abs(canvasState.origin.y - canvasState.current.y)}
                         />
                     )}
+                    
                     <CursorPresence />
                 </g>
             </svg>

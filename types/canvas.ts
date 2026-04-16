@@ -33,7 +33,7 @@ export type TextLayer = {
     y: number;
     width: number;
     height: number;
-    text: string;
+    value?: string;
     fill: Color;
 };
 
@@ -84,7 +84,7 @@ export type PathLayer = {
     y: number;
     width: number;
     height: number;
-    path: string;
+    path?: string;
     fill: Color;
     points?: number[][];
     value?: string;
