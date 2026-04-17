@@ -30,7 +30,8 @@ import {
 
 import { CursorPresence } from "./cursor-presence";
 import { nanoid } from "nanoid";
-import { connectionIdToColor, findInterSectingLayers, pointerEventToCanvasPoint, resizeBounds } from "@/lib/utils";
+import { connectionIdToColor, colorTocss, findInterSectingLayers, pointerEventToCanvasPoint, resizeBounds, penPointsToPathLayer } from "@/lib/utils";
+import { Path } from "./path";
 import { LiveObject } from "@liveblocks/client";
 import { Layerpreview } from "./layer-preview";
 import { SelectionBox } from "./selection-box";
@@ -56,8 +57,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         g: 0,
         b: 0
     });
-    // Live pencil points while drawing (not yet committed to storage)
-    const [pencilDraft, setPencilDraft] = useState<number[][] | null>(null);
+
 
     const history = useHistory();
     const canUndo = useCanUndo();
@@ -74,7 +74,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         }
         const liveLayerIds = storage.get("layerIds");
         const layerId = nanoid();
-        const layer = new LiveObject({
+        const layer = new LiveObject<Layer>({
             type: layerType,
             x: position.x,
             y: position.y,
@@ -84,7 +84,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                 ? { r: 255, g: 204, b: 153 } 
                 : (layerType === LayerType.Text ? { r: 0, g: 0, b: 0 } : lastUsedColor),
             value: "",
-        } as Layer);
+        });
 
         liveLayerIds.push(layerId);
         liveLayers.set(layerId, layer);
@@ -193,57 +193,60 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         }
     }, [canvasState]);
 
-    const continueDrawing = useCallback((
-        point: Point,
-        e: React.PointerEvent,
-    ) => {
-        if (canvasState.mode !== CanvasMode.Pencil) return;
-        setPencilDraft((prev) => {
-            if (!prev) return [[point.x, point.y, e.pressure]];
-            return [...prev, [point.x, point.y, e.pressure]];
+    const continueDrawing = useMutation(({ self, setMyPresence }, point: Point, e: React.PointerEvent) => {
+        const { pencilDraft } = self.presence;
+
+        if (
+            canvasState.mode !== CanvasMode.Pencil ||
+            pencilDraft == null || 
+            e.buttons !== 1
+        ) {
+            return;
+        }
+
+        setMyPresence({
+            cursor: point,
+            pencilDraft: pencilDraft.length === 1 &&
+                pencilDraft[0][0] === point.x &&
+                pencilDraft[0][1] === point.y &&
+                pencilDraft[0][2] === e.pressure
+                ? pencilDraft
+                : [...pencilDraft, [point.x, point.y, e.pressure]],
         });
     }, [canvasState.mode]);
 
+    const startDrawing = useMutation(({ setMyPresence }, point: Point, pressure: number) => {
+        setMyPresence({
+            pencilDraft: [[point.x, point.y, pressure]],
+            penColor: lastUsedColor,
+        });
+    }, [lastUsedColor]);
+
     const insertPath = useMutation(({ storage, self, setMyPresence }) => {
         const liveLayers = storage.get("layers");
+        const { pencilDraft } = self.presence;
+
         if (
             pencilDraft == null ||
             pencilDraft.length < 2 ||
             liveLayers.size >= MAX_LAYERS
         ) {
-            setPencilDraft(null);
+            setMyPresence({ pencilDraft: null });
             return;
         }
-        const liveLayerIds = storage.get("layerIds");
+
         const id = nanoid();
+        liveLayers.set(
+            id,
+            new LiveObject<Layer>(penPointsToPathLayer(pencilDraft, lastUsedColor))
+        );
 
-        // bounding box of the path
-        const xs = pencilDraft.map((p) => p[0]);
-        const ys = pencilDraft.map((p) => p[1]);
-        const x = Math.min(...xs);
-        const y = Math.min(...ys);
-        const width = Math.max(...xs) - x || 1;
-        const height = Math.max(...ys) - y || 1;
-
-        // Normalize points relative to bounding box origin
-        const normalizedPoints = pencilDraft.map((p) => [p[0] - x, p[1] - y, p[2]]);
-
-        const layer = new LiveObject({
-            type: LayerType.Path,
-            x,
-            y,
-            width,
-            height,
-            fill: lastUsedColor,
-            points: normalizedPoints,
-        } as Layer);
-
+        const liveLayerIds = storage.get("layerIds");
         liveLayerIds.push(id);
-        liveLayers.set(id, layer);
-        setMyPresence({ selection: [id] }, { addToHistory: true });
-        setPencilDraft(null);
+
+        setMyPresence({ pencilDraft: null });
         setCanvasState({ mode: CanvasMode.Pencil });
-    }, [pencilDraft, lastUsedColor]);
+    }, [lastUsedColor]);
 
     const onPointerMove = useMutation(({ setMyPresence }, e: React.PointerEvent) => {
         e.preventDefault();
@@ -294,6 +297,8 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         history.resume();
     }, [canvasState, camera, history, insertLayer, unselectLayers, insertPath]);
 
+
+
     const onPointerDown = useCallback((e: React.PointerEvent) => {
         const point = pointerEventToCanvasPoint(e, camera);
 
@@ -302,14 +307,18 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         }
 
         if (canvasState.mode === CanvasMode.Pencil) {
-            setPencilDraft([[point.x, point.y, e.pressure]]);
+            startDrawing(point, e.pressure);
             return;
         }
 
         setCanvasState({ origin: point, mode: CanvasMode.Pressing });
-    }, [canvasState.mode, camera, setCanvasState]);
+    }, [canvasState.mode, camera, setCanvasState, startDrawing]);
 
     const selections = useOthersMapped((other) => other.presence.selection);
+    const others = useOthersMapped((other) => ({
+        pencilDraft: other.presence.pencilDraft,
+        penColor: other.presence.penColor,
+    }));
 
     const onLayerPointerDown = useMutation(({ self, setMyPresence }, e: React.PointerEvent, layerId: string,) => {
         if (
@@ -408,6 +417,29 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                             height={Math.abs(canvasState.origin.y - canvasState.current.y)}
                         />
                     )}
+                    {myPresence.pencilDraft && (
+                        <Path 
+                            x={0}
+                            y={0}
+                            fill={colorTocss(lastUsedColor)}
+                            points={myPresence.pencilDraft}
+                        />
+                    )}
+                    {others.map(([connectionId, data]) => {
+                        if (data.pencilDraft) {
+                            return (
+                                <Path
+                                    key={connectionId}
+                                    x={0}
+                                    y={0}
+                                    points={data.pencilDraft}
+                                    stroke={connectionIdToColor(connectionId)}
+                                    fill={data.penColor ? colorTocss(data.penColor) : "#000"}
+                                />
+                            )
+                        }
+                        return null;
+                    })}
                     
                     <CursorPresence />
                 </g>

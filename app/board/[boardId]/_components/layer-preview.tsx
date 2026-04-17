@@ -7,6 +7,8 @@ import { Rectangle } from "./rectangle";
 import { Ellipse } from "./ellipse";
 import { Text } from "./text";
 import { Note } from "./note";
+import { Path } from "./path";
+import { colorTocss } from "@/lib/utils";
 
 interface LayerPreviewProps {
     id: string;
@@ -20,6 +22,19 @@ export const Layerpreview = memo(({ id, onLayerPointerDown, selectionColor }: La
         return null;
     }
     switch (layer.type) {
+        case LayerType.Path:
+            return (
+                <Path
+                    key={id}
+                    points={layer.points || []}
+                    onPointerDown={(e) => onLayerPointerDown(e, id)}
+                    x={layer.x}
+                    y={layer.y}
+                    fill={layer.fill ? colorTocss(layer.fill) : "#000"}
+                    stroke={selectionColor}
+                />
+            );
+
         case LayerType.Ellipse:
             return (
                 <Ellipse
@@ -59,6 +74,7 @@ export const Layerpreview = memo(({ id, onLayerPointerDown, selectionColor }: La
                     selectionColor={selectionColor}
                 />
             );
+        
        
         default:
             console.warn("Unknown layer type");

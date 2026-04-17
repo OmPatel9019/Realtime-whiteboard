@@ -9,6 +9,8 @@ declare global {
     Presence: {
       selection: string[];
       cursor: { x: number; y: number } | null;
+      pencilDraft: [number, number, number][] | null;
+      penColor: Color | null;
     };
 
     // The Storage tree for the room, for useMutation, useStorage, etc.
