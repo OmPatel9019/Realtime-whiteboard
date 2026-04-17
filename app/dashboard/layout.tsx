@@ -15,10 +15,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <div className="pl-[60px] h-full">
                 <div className="flex gap-x-4 h-full">
                     <Orgsidebar />
-                    <div className="flex-1 flex flex-col">
+                    <div className="flex-1 flex flex-col overflow-y-auto h-full">
                         <Navbar />
                         <Toaster />
-                        {/* the {children} prop refers to the content of the page.tsx that is being rendered inside that layout. */}
                         {children}
                     </div>
                 </div>

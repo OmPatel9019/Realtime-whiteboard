@@ -36,7 +36,6 @@ export const BoardList = ({
           <BoardCard.Skeleton />
           <BoardCard.Skeleton />
           <BoardCard.Skeleton />
-          <BoardCard.Skeleton />
         </div>
       </div>
     );

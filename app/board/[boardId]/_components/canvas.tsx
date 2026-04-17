@@ -36,7 +36,9 @@ import { LiveObject } from "@liveblocks/client";
 import { Layerpreview } from "./layer-preview";
 import { SelectionBox } from "./selection-box";
 import { SelectionTools } from "./selection-tools";
-
+import { useDisableScrollBounce } from "@/hooks/use-disable-scroll-bounce";
+import { useDeleteLayers } from "@/hooks/use-delete-layers";
+import { useEffect } from "react";
 
 
 const MAX_LAYERS = 100;
@@ -51,6 +53,8 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         mode: CanvasMode.None,
     });
 
+    const pencilDraft = useSelf((me) => me.presence.pencilDraft);
+
     const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
     const [lastUsedColor, setLastUsedColor] = useState<Color>({
         r: 0,
@@ -58,7 +62,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         b: 0
     });
 
-
+    useDisableScrollBounce();
     const history = useHistory();
     const canUndo = useCanUndo();
     const canRedo = useCanRedo();
@@ -368,6 +372,33 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         return layerIdToColorSelection;
     }, [selections]);
 
+    const deletelayers = useDeleteLayers();
+
+    useEffect(()=>{
+        function onKeyDown(e: KeyboardEvent){
+            switch(e.key){
+                case "Delete":
+                    deletelayers();
+                    break;
+                case "z":
+                    if (e.ctrlKey || e.metaKey) {
+                        history.undo();
+                    }
+                    break;
+                case "y":
+                    if (e.ctrlKey || e.metaKey) {
+                        history.redo();
+                    }
+                    break;
+
+            }
+        }
+        document.addEventListener("keydown", onKeyDown);
+        return () => {
+            document.removeEventListener("keydown", onKeyDown);
+        };
+    },[deletelayers, history])
+
     return (
         <main className="h-screen w-full relative bg-neutral-100">
             <Info boardId={boardId} />
@@ -442,6 +473,14 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                     })}
                     
                     <CursorPresence />
+                    {pencilDraft !== null && pencilDraft.length > 0 && (
+                        <Path
+                            x={0}
+                            y={0}
+                            points={pencilDraft}
+                            fill={colorTocss(lastUsedColor)}
+                        />
+                    )}
                 </g>
             </svg>
         </main>

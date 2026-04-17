@@ -30,7 +30,7 @@ export const Cursor = memo(({ connectionId }: CursorProps) => {
         transition: "transform 50ms ease-out",
       }}
       height={50}
-      width={name.length * 10 + 24}
+      width={name.length * 15 + 30}
       className="relative drop-shadow-md"
     >
       <MousePointer2

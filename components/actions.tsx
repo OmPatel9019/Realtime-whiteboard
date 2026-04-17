@@ -1,6 +1,7 @@
 "use client"
 
-import { DropdownMenuContentProps} from "@radix-ui/react-dropdown-menu"
+import { useRouter } from "next/navigation";
+import { DropdownMenuContentProps } from "@radix-ui/react-dropdown-menu";
 import { useApiMutation } from "@/hooks/use-api-mutation";
 import { Ghost, Link2, Trash2, Pencil } from "lucide-react";
 import {
@@ -16,35 +17,40 @@ import { ConfirmModel } from "./confirm-model";
 import { Button } from "./ui/button";
 import { useRenameModel } from "@/store/use-rename-model";
 
-interface ActionProps{
-    children : React.ReactNode;
-    side? : DropdownMenuContentProps["side"];
-    sideOffset? : DropdownMenuContentProps["sideOffset"];
-    id : string;
-    title : string;
+interface ActionProps {
+    children: React.ReactNode;
+    side?: DropdownMenuContentProps["side"];
+    sideOffset?: DropdownMenuContentProps["sideOffset"];
+    id: string;
+    title: string;
 }
 
-export const Actions =({
+export const Actions = ({
     children,
     side,
     sideOffset,
     id,
     title
-}: ActionProps) =>{
+}: ActionProps) => {
+    const router = useRouter();
     const { onOpen } = useRenameModel();
-    const { mutate , pending } = useApiMutation(api.board.remove)
-    const onCopyLink = () =>{
+    const { mutate, pending } = useApiMutation(api.board.remove)
+    const onCopyLink = () => {
         navigator.clipboard.writeText(
             `${window.location.origin}/board/${id}`,
         )
-        .then(()=>toast.success("Link copied!"))
-        .catch(()=>toast.error("Failed to copy link"))
+            .then(() => toast.success("Link copied!"))
+            .catch(() => toast.error("Failed to copy link"))
     }
-    const onDelete = () =>{
-        mutate({id})
-        .then(()=>toast.success("Board Deleted!"))
-        .catch(()=>toast.error("Failed to Delete Board!"))
+    const onDelete = () => {
+        mutate({ id })
+            .then(() => {
+                toast.success("Board Deleted!");
+                router.push("/");
+            })
+            .catch(() => toast.error("Failed to Delete Board!"))
     }
+
     return(
        <DropdownMenu>
         <DropdownMenuTrigger asChild>
