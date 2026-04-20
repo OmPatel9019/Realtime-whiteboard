@@ -122,7 +122,6 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         setCanvasState({ mode: CanvasMode.Translating, origin: point });
     }, [canvasState]);
 
-    // Subscribe to our own presence so we can render our own pencil draft.
     const [myPresence] = useMyPresence();
 
     const onWheel = useCallback((e: React.WheelEvent) => {
