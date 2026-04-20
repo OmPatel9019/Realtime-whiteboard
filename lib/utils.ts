@@ -1,7 +1,7 @@
 import React from "react"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { Camera, Color, Point, Side, XYWH, Layer, PathLayer, LayerType } from "@/types/canvas";
+import { Camera, Color, Point, Side, XYWH, PathLayer, LayerType, Layer } from "@/types/canvas";
 
 const COLORS = ["#DC2626", "#ff8017", "#059669", "#7C3AED", "#d97178"];
 
@@ -73,7 +73,7 @@ export function getSvgPathFromPoints(points: number[][]): string {
 
 export function findInterSectingLayers(
   layerIds: string[],
-  layers: ReadonlyMap<string, any>,
+  layers: ReadonlyMap<string, Layer>,
   a: Point,
   b: Point,
 ) {
@@ -87,17 +87,19 @@ export function findInterSectingLayers(
   const ids = [];
 
   for (const layerId of layerIds) {
-    const layer = layers.get(layerId);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const layer = layers.get(layerId) as any;
 
     if (!layer) {
       continue;
     }
 
     // Handle both plain objects and LiveObjects
-    const x = "get" in layer && typeof layer.get === "function" ? layer.get("x") : layer.x;
-    const y = "get" in layer && typeof layer.get === "function" ? layer.get("y") : layer.y;
-    const width = "get" in layer && typeof layer.get === "function" ? layer.get("width") : layer.width;
-    const height = "get" in layer && typeof layer.get === "function" ? layer.get("height") : layer.height;
+    // We use a safe check to see if .get exists (for LiveObjects)
+    const x = typeof layer.get === "function" ? layer.get("x") : layer.x;
+    const y = typeof layer.get === "function" ? layer.get("y") : layer.y;
+    const width = typeof layer.get === "function" ? layer.get("width") : layer.width;
+    const height = typeof layer.get === "function" ? layer.get("height") : layer.height;
 
     if (
       rect.x + rect.width > x &&
