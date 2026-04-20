@@ -47,6 +47,7 @@ interface CanvasProps {
 
 export const Canvas = ({ boardId }: CanvasProps) => {
     const layerIds = useStorage((root) => root.layerIds);
+    const layers = useStorage((root) => root.layers);
     const [canvasState, setCanvasState] = useState<CanvasState>({
         mode: CanvasMode.None,
     });
@@ -141,13 +142,11 @@ export const Canvas = ({ boardId }: CanvasProps) => {
     }, []);
 
     const updateSelectionNet = useMutation((
-        { storage, setMyPresence },
+        { setMyPresence },
         current: Point,
         origin: Point,
     ) => {
-        if (!layerIds) return;
-
-        const layers = storage.get("layers").toImmutable();
+        if (!layerIds || !layers) return;
         setCanvasState({
             mode: CanvasMode.SelectionNet,
             origin,
@@ -160,7 +159,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
             current,
         );
         setMyPresence({ selection: ids });
-    }, [layerIds]);
+    }, [layerIds, layers]);
 
 
     const startMultiSelection = useCallback((

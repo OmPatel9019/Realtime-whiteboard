@@ -2,19 +2,28 @@ import { shallow } from "@liveblocks/react";
 import { useStorage, useSelf } from "@liveblocks/react/suspense";
 import { Layer, XYWH } from "@/types/canvas";
 
-const boundingBox = (layers: Layer[]): XYWH | null => {
+const boundingBox = (layers: any[]): XYWH | null => {
     const first = layers[0];
     if(!first){
         return null;
     }
+
+    // Handle both plain objects and LiveObjects
+    const getCoord = (obj: any, key: string) => {
+        return "get" in obj && typeof obj.get === "function" ? obj.get(key) : obj[key];
+    };
    
-    let left = first.x;
-    let top = first.y;
-    let right = first.x + first.width;
-    let bottom = first.y + first.height;
+    let left = getCoord(first, "x");
+    let top = getCoord(first, "y");
+    let right = left + getCoord(first, "width");
+    let bottom = top + getCoord(first, "height");
 
     for(let i = 1; i < layers.length; i++){
-        const {x, y, width, height} = layers[i];
+        const layer = layers[i];
+        const x = getCoord(layer, "x");
+        const y = getCoord(layer, "y");
+        const width = getCoord(layer, "width");
+        const height = getCoord(layer, "height");
 
         if(left>x){
             left = x;

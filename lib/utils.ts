@@ -73,7 +73,7 @@ export function getSvgPathFromPoints(points: number[][]): string {
 
 export function findInterSectingLayers(
   layerIds: string[],
-  layers: ReadonlyMap<string, Layer>,
+  layers: ReadonlyMap<string, any>,
   a: Point,
   b: Point,
 ) {
@@ -85,12 +85,19 @@ export function findInterSectingLayers(
   };
 
   const ids = [];
+
   for (const layerId of layerIds) {
     const layer = layers.get(layerId);
-    if (layer == null) {
+
+    if (!layer) {
       continue;
     }
-    const { x, y, height, width } = layer;
+
+    // Handle both plain objects and LiveObjects
+    const x = "get" in layer && typeof layer.get === "function" ? layer.get("x") : layer.x;
+    const y = "get" in layer && typeof layer.get === "function" ? layer.get("y") : layer.y;
+    const width = "get" in layer && typeof layer.get === "function" ? layer.get("width") : layer.width;
+    const height = "get" in layer && typeof layer.get === "function" ? layer.get("height") : layer.height;
 
     if (
       rect.x + rect.width > x &&
@@ -101,6 +108,7 @@ export function findInterSectingLayers(
       ids.push(layerId);
     }
   }
+
   return ids;
 }
 
