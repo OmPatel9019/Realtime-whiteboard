@@ -3,7 +3,6 @@ import { Sidebar } from "./component/sidebar";
 import { Navbar } from "./component/sidebar/navbar";
 import { Toaster } from "@/components/ui/sonner";
 
-// used to type the props of a component that accepts children — meaning any valid React node(s) passed between the component’s opening and closing tags.
 interface DashboardLayoutProps {
     children: React.ReactNode;
 }

@@ -11,11 +11,10 @@ import {
     useMutation,
     useMyPresence,
     useStorage,
-    useOther,
     useOthersMapped
 } from "@liveblocks/react";
 
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 import {
     CanvasState,
     CanvasMode,
@@ -38,7 +37,6 @@ import { SelectionBox } from "./selection-box";
 import { SelectionTools } from "./selection-tools";
 import { useDisableScrollBounce } from "@/hooks/use-disable-scroll-bounce";
 import { useDeleteLayers } from "@/hooks/use-delete-layers";
-import { useEffect } from "react";
 
 
 const MAX_LAYERS = 100;
@@ -124,8 +122,8 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         setCanvasState({ mode: CanvasMode.Translating, origin: point });
     }, [canvasState]);
 
-    // Log our own cursor to the console so we can see it working locally!
-    const [myPresence, updateMyPresence] = useMyPresence();
+    // Subscribe to our own presence so we can render our own pencil draft.
+    const [myPresence] = useMyPresence();
 
     const onWheel = useCallback((e: React.WheelEvent) => {
         setCamera((camera) => (
@@ -448,7 +446,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
                             height={Math.abs(canvasState.origin.y - canvasState.current.y)}
                         />
                     )}
-                    {myPresence.pencilDraft && (
+                    {myPresence?.pencilDraft && (
                         <Path 
                             x={0}
                             y={0}

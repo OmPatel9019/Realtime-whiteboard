@@ -5,17 +5,14 @@ import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
 import { Poppins } from "next/font/google";
 import { Hint } from "@/components/hint";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
 import { useQuery } from "convex/react";
 import { Id } from "@/convex/_generated/dataModel";
 import Link from "next/link";
-import { RenameModal } from "@/components/modal/rename-modal";
 import { useRenameModel } from "@/store/use-rename-model";
 import { api } from "@/convex/_generated/api";
 import { Actions } from "@/components/actions";
-import { MoreHorizontal } from "lucide-react";
 
 interface InfoProps {
     boardId: string;
@@ -55,7 +52,7 @@ export const Info = ({ boardId }: InfoProps) => {
                         height={60}
                     />
                     <span className={cn("font-semibold text-2xl ml-1 text-black-800", fonts.className)}>
-                        Sketch
+                        Boardly
                     </span>
                 </Link>
             </Button>

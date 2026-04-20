@@ -23,15 +23,15 @@ export const Orgsidebar = () => {
     return (
         <div className="hidden lg:flex flex-col h-full w-[204px]  mt-3 space-y-4 pl-[5px] pt-[5px] ">
             <Link href="/">
-                <div className="flex items-center gap-x-4">
+                <div className="flex items-center gap-x-2">
                     <Image
                         src="/logo.svg"
                         alt="Logo"
                         width={60}
                         height={60}
                     />
-                    <span className={cn("text-2xl text-black-600", fonts.className)}>
-                        Sketchly
+                    <span className={cn("text-3xl text-black-600", fonts.className)}>
+                        Boardly
                     </span>
                 </div>
             </Link>

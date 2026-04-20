@@ -1,7 +1,3 @@
-import { Orgsidebar } from "./dashboard/component/org-sidebar";
-import { Sidebar } from "./dashboard/component/sidebar";
-import { Navbar } from "./dashboard/component/sidebar/navbar";
-
 const DashboardPage = () => {
   return (
     <div className="h-full">

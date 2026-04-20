@@ -3,13 +3,12 @@
 import { useRouter } from "next/navigation";
 import { DropdownMenuContentProps } from "@radix-ui/react-dropdown-menu";
 import { useApiMutation } from "@/hooks/use-api-mutation";
-import { Ghost, Link2, Trash2, Pencil } from "lucide-react";
+import { Link2, Trash2, Pencil } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-    DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu"
 import { toast } from "sonner";
 import { api } from "@/convex/_generated/api";

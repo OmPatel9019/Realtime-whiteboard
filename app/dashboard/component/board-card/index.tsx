@@ -46,7 +46,6 @@ export const BoardCard = ({
     const handleFavorite = useMutation(api.board.favorite);
 
     const {
-        mutate: onFavorite,
         pending: pendingFavorite,
     } = useApiMutation(api.board.favorite);
 
@@ -94,11 +93,16 @@ export const BoardCard = ({
     );
 };
 
-BoardCard.Skeleton = function BoardCardSkeleton() {
+    BoardCard.Skeleton = function BoardCardSkeleton() {
     return (
         <div className="aspect-[100/127] rounded-lg overflow-hidden">
-            <Skeleton className="px-2 w-full h-full object-fit" />
+            <div className="mt-2 w-[680px] h-[540px] ">
+                <Skeleton />
+            </div>
         </div>
 
     );
-}
+};
+
+
+
