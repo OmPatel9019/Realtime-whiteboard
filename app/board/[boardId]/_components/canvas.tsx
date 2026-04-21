@@ -154,7 +154,7 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         })
         const ids = findInterSectingLayers(
             [...layerIds],
-            layers,
+            new Map(Object.entries(layers)),
             origin,
             current,
         );
