@@ -17,7 +17,7 @@ interface LayerPreviewProps {
 }
 
 export const Layerpreview = memo(({ id, onLayerPointerDown, selectionColor }: LayerPreviewProps) => {
-    const layer = useStorage((root) => root.layers.get(id));
+    const layer = useStorage((root) => (root.layers as any)[id]);
     if (!layer) {
         return null;
     }
