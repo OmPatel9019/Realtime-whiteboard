@@ -11,6 +11,7 @@ import { useApiMutation } from "@/hooks/use-api-mutation";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { useMutation } from "convex/react";
+import Image from "next/image";
 import { Id } from "@/convex/_generated/dataModel";
 
 
@@ -68,11 +69,12 @@ export const BoardCard = ({
         <Link href={`/board/${id}`}>
             <div className="group aspect-[100/127] flex flex-col rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all hover:bg-black/30">
 
-                <div className="relative flex-1 bg-yellow-50 px-2">
-                    <img
+                <div className="relative flex-1 bg-yellow-50">
+                    <Image
                         src={imageUrl.replace("/placeholders/", "/")}
                         alt={title}
-                        className="px-2 w-full h-full object-fit"
+                        fill
+                        className="object-contain"
                     />
                     <Actions id={id} title={title}>
                         <button className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity px-3 py-2 outline-none">
@@ -93,14 +95,13 @@ export const BoardCard = ({
     );
 };
 
-    BoardCard.Skeleton = function BoardCardSkeleton() {
+BoardCard.Skeleton = function BoardCardSkeleton() {
     return (
         <div className="aspect-[100/127] rounded-lg overflow-hidden">
-            <div className="mt-2 w-[680px] h-[540px] ">
+            <div className="mt-2 w-[420px] h-[320px] ">
                 <Skeleton />
             </div>
         </div>
-
     );
 };
 
