@@ -17,6 +17,7 @@ interface LayerPreviewProps {
 }
 
 export const Layerpreview = memo(({ id, onLayerPointerDown, selectionColor }: LayerPreviewProps) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const layer = useStorage((root) => (root.layers as any)[id]);
     if (!layer) {
         return null;
