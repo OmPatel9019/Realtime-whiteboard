@@ -16,7 +16,10 @@ export const SelectionBox = memo(({onResizeLayerPointerDown}: SelectionBoxProps)
         me.presence.selection.length === 1 ? me.presence.selection[0] : null
     );
 
-    const isShowingHandles = useStorage((root)=> solelayerIds && root.layers.get(solelayerIds)?.type !== LayerType.Path);
+    const isShowingHandles = useStorage((root) => {
+    const layer = solelayerIds ? root.layers.get(solelayerIds) : null;
+    return layer?.type !== LayerType.Path;
+});
        
 
     const bounds = useSelectionBounds();
