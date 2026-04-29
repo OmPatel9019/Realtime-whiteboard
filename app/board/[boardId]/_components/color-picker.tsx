@@ -19,7 +19,7 @@ export const ColorPicker = ({
            <ColorButton color={{r:221, g: 160, b: 221}} onClick={onChange} />
            <ColorButton color={{r: 37, g: 99, b: 235}} onClick={onChange} />
            <ColorButton color={{r: 139, g: 92, b: 246}} onClick={onChange} />
-           <ColorButton color={{r: 102, g: 205, b: 210gi}} onClick={onChange} />
+           <ColorButton color={{r: 102, g: 205, b: 210}} onClick={onChange} />
         </div>
     )
 };
