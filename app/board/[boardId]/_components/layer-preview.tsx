@@ -17,10 +17,13 @@ interface LayerPreviewProps {
 }
 
 export const Layerpreview = memo(({ id, onLayerPointerDown, selectionColor }: LayerPreviewProps) => {
-    const layer = useStorage((root) => root.layers.get(id));
-    if (!layer) {
+    const layer = useStorage((root: any) => {
+        // Explicitly check for layers and use a safe access pattern
+        if (root?.layers && typeof root.layers.get === "function") {
+            return root.layers.get(id);
+        }
         return null;
-    }
+    });
     switch (layer.type) {
         case LayerType.Path:
             return (
@@ -44,7 +47,7 @@ export const Layerpreview = memo(({ id, onLayerPointerDown, selectionColor }: La
                     selectionColor={selectionColor}
                 />
             );
-        
+
         case LayerType.Note:
             return (
                 <Note
@@ -74,8 +77,8 @@ export const Layerpreview = memo(({ id, onLayerPointerDown, selectionColor }: La
                     selectionColor={selectionColor}
                 />
             );
-        
-       
+
+
         default:
             console.warn("Unknown layer type");
             return null;

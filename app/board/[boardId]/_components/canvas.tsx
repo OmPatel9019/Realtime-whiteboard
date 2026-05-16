@@ -401,7 +401,10 @@ export const Canvas = ({ boardId }: CanvasProps) => {
             <Participants />
             <Toolbar
                 canvasState={canvasState}
-                setCanvasState={setCanvasState}
+                setCanvasState={(newState) => {
+                    unselectLayers();
+                    setCanvasState(newState);
+                }}
                 undo={history.undo}
                 redo={history.redo}
                 canUndo={canUndo}
